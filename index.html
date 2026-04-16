@@ -204,16 +204,16 @@ const DEFAULT_PERFORMANCE_AGENTS = [
     trustLevel: "L1",
     agentType: "Claude Agent",
     intent: "Pulls outputs from all four domain synthesis agents. Identifies cross-domain conflicts and surfaces both short-term revenue and GP actions and longer-term growth opportunities — category expansion, assortment gaps, retention levers, and conversion potential that compounds over time. Balances fixing what is broken today with building what scales tomorrow. Delivers one daily action list to Performance Lead instead of 20 raw agent outputs.",
-    triggerCondition: "All four synthesis agents (Pricing, Category, Conversion, Retention) have submitted their daily outputs",
-    frequency: "Daily",
-    maxTriggerWindow: "08:00 local time",
-    localeScope: "All markets (EU + US)",
-    inputs: "Pricing Synthesis Agent output · Category Synthesis Agent output · Conversion Synthesis Agent output · Retention Synthesis Agent output · Previous day's action list (for conflict detection)",
-    outputs: "One daily prioritised action list ranked by revenue + GP impact · Cross-domain conflict flags · KPI breach alerts",
-    rules: ["Never act on raw agent outputs — only synthesise after all 4 synthesis agents have reported", "Detect and surface conflicts before they reach the Performance Lead (e.g. pricing drop on a page flagged for high-quality traffic by conversion agent)", "Rank every action by estimated revenue or GP impact — no unranked outputs", "Deliver one list, not four domain reports", "Never approve actions autonomously — all outputs are recommendations for the Performance Lead"],
+    triggerCondition: "RUN 1 (Morning — Urgency): All four synthesis agents have submitted their overnight outputs by 07:30 · RUN 2 (Afternoon — Growth): Scheduled daily at 13:00, independent of morning run",
+    frequency: "Twice daily — Morning urgency run + Afternoon growth run",
+    maxTriggerWindow: "Morning action list by 08:00 · Growth opportunity list by 13:30",
+    localeScope: "All markets (EU + US) — Growth run segments output per product-market combination (PMC)",
+    inputs: "Pricing Synthesis Agent output · Category Synthesis Agent output · Conversion Synthesis Agent output · Retention Synthesis Agent output · Previous day's action list · PMC maturity stage per market (LAUNCH / GROWTH / MATURE) · HelloProductScore per PMC · Competitor landscape per market",
+    outputs: "MORNING — Urgent action list: KPI breaches, FIX triggers (HPS <60%), conversion drops, margin alerts, churn flags · AFTERNOON — Growth opportunity list per PMC: new categories to enter, existing products in new geographic markets, depth expansion within existing categories (new SKUs / variants)",
+    rules: ["Never act on raw agent outputs — only synthesise after all 4 synthesis agents have reported", "Morning run is strictly urgency-first — no growth opportunities in the morning list unless they are also urgent", "Afternoon run is strictly growth-focused — no repeat of morning urgent items unless they also have a growth dimension", "Growth opportunities must be segmented by PMC type: (1) new category in existing market, (2) existing product in new geographic market, (3) new product within existing category", "Rank morning actions by revenue and GP impact at risk — rank afternoon actions by growth potential and strategic fit", "Detect and surface cross-domain conflicts before they reach the Performance Lead", "Never approve actions autonomously — all outputs are recommendations for the Performance Lead"],
     escalationTrigger: "Critical KPI breach: ROAS below floor, margin below threshold, or cohort health drop >10%",
     escalationPayload: ["breach_type", "affected_domain", "affected_market", "estimated_revenue_impact", "recommended_action"],
-    successMetric: "Performance Lead reviews one action list per day (not 20 raw reports). Cross-domain conflicts detected before they cause revenue damage. Action list delivered by 08:00 daily."
+    successMetric: "Morning action list delivered by 08:00. Afternoon growth list delivered by 13:30. Growth opportunities clearly segmented by PMC type. Performance Lead spends morning on fixes, afternoon on growth decisions."
   },
   // ── PRICING ──
   {
