@@ -1361,7 +1361,7 @@ function createAgent() {
 }
 
 async function loadDefaultAgents() {
-  if (agents.length > 0 && !confirm('This will replace all current agents with the 28 default Performance agents. Continue?')) return;
+  if (agents.length > 0 && !confirm('This will replace all current agents with the default Performance agents. Continue?')) return;
   agents = DEFAULT_PERFORMANCE_AGENTS.map(a => ({
     id: crypto.randomUUID(),
     _group: a.group,
@@ -1387,7 +1387,7 @@ async function loadDefaultAgents() {
   activeId = agents[0].id;
   saveLocal();
   render();
-  toast('Loaded 28 Performance agents!');
+  toast(`Loaded ${agents.length} Performance agents!`);
   // Push to Google Sheets if connected
   if (isOnline && sheetsUrl) {
     await pushAllToSheet();
